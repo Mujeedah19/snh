@@ -30,10 +30,6 @@ include_once("lib/header.php");
         </select>
     </p>
     <p>
-        <label> Password </label> <br>
-        <input type="password" name="password" placeholder="Password">
-    </p>
-    <p>
         <label> Designation </label> <br>
         <select name="designation" required>
             <option value=""> Select One </option>
@@ -45,6 +41,10 @@ include_once("lib/header.php");
     <p>
         <label> Department </label> <br>
         <input type="department" name="department" placeholder="Department" required>
+    </p>
+    <p>
+        <label> Password </label> <br>
+        <input type="password" name="password" placeholder="Password">
     </p>
     <p>
     <button type="submit"> Register </button>
