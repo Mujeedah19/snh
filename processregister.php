@@ -1,25 +1,24 @@
 <?php
 session_start();
-
-// collecting the data
-
-$first_name =$_POST["first_name"];
-$last_name =$_POST["last_name"];
-$email =$_POST["email"];
-$gender =$_POST["gender"];
-$designation =$_POST["designation"];
-$department =$_POST["department"];
-$password =$_POST["password"];
-
 $errorCount= 0;
 
 // verifying the data, validation
 $first_name = $_POST['first_name'] != "" ? $_POST['first_name'] : $errorCount++;
-$flast_name = $_POST['last_name'] != "" ? $_POST['last_name'] : $errorCount++;
+preg_match('#[0-9]#',$_POST['first_name']) ? $errorCount++ :  $_POST['first_name'];
+strlen($_POST['first_name']) < 2 ?  $errorCount++ : $_POST['first_name'];
+
+$last_name = $_POST['last_name'] != "" ? $_POST['last_name'] : $errorCount++;
+preg_match('#[0-9]#',$_POST['last_name']) ? $errorCount++ :  $_POST['last_name'];
+strlen($_POST['last_name']) < 2 ?  $errorCount++ : $_POST['last_name'];
+
 $email = $_POST['email'] != "" ? $_POST['email'] : $errorCount++;
+!filter_var($email,FILTER_VALIDATE_EMAIL) ? $errorCount++ : $_POST['email'];
+strlen($_POST['email']) < 5 ?  $errorCount++ : $_POST['email'];
+
 $gender = $_POST['gender'] != "" ? $_POST['gender'] : $errorCount++;
 $designation = $_POST['designation'] != "" ? $_POST['designation'] : $errorCount++;
 $department = $_POST['department'] != "" ? $_POST['department'] : $errorCount++;
+$date = $_POST['date'] != "" ? $_POST['date'] : $errorCount++;
 $password = $_POST['password'] != "" ? $_POST['password'] : $errorCount++;
 
 $_SESSION['first_name'] = $first_name;
@@ -28,6 +27,7 @@ $_SESSION['email'] = $email;
 $_SESSION['gender'] = $gender;
 $_SESSION['designation'] = $designation;
 $_SESSION['department'] = $department;
+$_SESSION['date'] = $date;
 
 
 if($errorCount > 0){
@@ -37,10 +37,11 @@ if($errorCount > 0){
         $session_error .= "s";
     }
 
-    $session_error .= " in your form submission";
+    $session_error .= " in your form submission.";
     $_SESSION['error'] = $session_error;
     
     header("Location:register.php");
+    die();
 }else{
     $allUsers = scandir("db/users/");
     $countAllUsers = count($allUsers);
@@ -54,6 +55,7 @@ if($errorCount > 0){
         "gender" => $gender,
         "designation" => $designation,
         "department" => $department,
+        "date" => $date,
         "password" => password_hash($password, PASSWORD_DEFAULT)
     ];
 
@@ -69,7 +71,8 @@ if($errorCount > 0){
     
 
     file_put_contents("db/users/" . $email . ".json", json_encode($userObject));
-    $_SESSION['message'] = "You can now log in. Registration Successful " . $first_name;
+    
+    $_SESSION['message'] =  $first_name . "'s Registration Successful, you can now log in.";
     header("Location:login.php");
 }
 

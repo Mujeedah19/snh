@@ -1,18 +1,16 @@
-
 <?php
 include_once("lib/header.php");
-
 if(isset($_SESSION['loggedIn']) && !empty($_SESSION['loggedIn'])){
-    header("Location: dashboard.php");
-}
 
+   if($_SESSION['role']=="Super Admin"){
+        // echo"Super Admin";
 ?>
 <div class="container">
     <div class="row col-6">
        <h3> Register </h3>
     </div>
     <div class="row col-6">
-        <p> <strong> Welcome, Please Register </strong> </p>
+        <p> <strong> Welcome, You can register a new user </strong> </p>
     </div>
     <div class="row col-6">            
         <p> All fields are required </p>
@@ -131,15 +129,25 @@ if(isset($_SESSION['loggedIn']) && !empty($_SESSION['loggedIn'])){
             <p>
             <button class="btn btn-sm btn-success" type="submit" > Register </button>
             </p>
-            <p>
+            <!-- <p>
                 <a href="forgot.php"> Forgot Password </a> <br>
                 <a href="login.php"> Already have an account? Login </a>
-            </p>
+            </p> -->
 
             </form>
     </div>
 </div>
 
 <?php
-include_once("lib/footer.php");
+
+        
+        //
+   }else{
+       echo"Patient or Medic";
+   }
+
+}else{
+    header("Location: login.php");
+
+}
 ?>

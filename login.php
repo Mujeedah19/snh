@@ -7,7 +7,11 @@ if(isset($_SESSION['loggedIn']) && !empty($_SESSION['loggedIn'])){
     header("Location: dashboard.php");
 }
 ?>
+<div class="container">
+    <div class="row col-6">
     <h3> Login </h3>
+    </div>
+    <div class="row col-6">
     <p>
     <?php
         if(isset($_SESSION['message']) && !empty($_SESSION['message'])){
@@ -34,18 +38,23 @@ if(isset($_SESSION['loggedIn']) && !empty($_SESSION['loggedIn'])){
                 echo "value=" . $_SESSION['email']; 
             }
             ?>
-        type="text" name="email" placeholder="Email" required>
+        type="text" class="form-control" name="email" placeholder="Email" required>
     </p>
     <p>
         <label> Password </label> <br>
-        <input type="password" name="password" placeholder="Password">
+        <input type="password" class="form-control" name="password" placeholder="Password">
     </p>
     <p>
-        <button type="submit"> Login </button>
+        <button class="btn btn-sm btn-primary"type="submit"> Login </button>
+    </p>
+    <p>
+        <a href="forgot.php"> Forgot Password </a> <br>
+        <a href="register.php"> Don't have an account? Register </a>
     </p>
     
     </form>
-
+</div>
+</div>
 <?php
 include_once("lib/footer.php");
 ?>
