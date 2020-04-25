@@ -1,33 +1,40 @@
 <?php
 include_once("lib/header.php");
-// if(!isset($_GET['token']) && !isset($_SESSION['token'])){
-//     $_SESSION['error']= "You are not authorizeed to view that page";
-//     header("Location: login.php");
-// }
+require_once("functions/alert.php");
+require_once("functions/user.php");
+
+
+if(!is_user_loggedIn() && !is_token_set()){
+    $_SESSION['error']= "You are not authorizeed to view that page";
+    header("Location: login.php");
+}
+
 ?>
     <h3> Reset Password</h3>
     <p> Reset password associated to your account.  </p>
 
     <form method="POST" action="processreset.php">
-    <?php
-    if(isset($_SESSION['error']) && !empty($_SESSION['error'])){
-        echo "<span style= 'color:red' >" . $_SESSION['error'] . "</span>";
-        session_destroy();
-    }
-    ?>
+    <p> <?php print_alert(); ?> <p>
+    <?php if(!is_user_loggedIn()) {?>
     <input 
-    <?php
-    // if(!isset($_GET['token']) && !isset($_SESSION['token'])){
-    //     echo "value='" . $_SESSION['token'] ."'";
-    // }else{
-    //     echo "value='" . $_GET['token'] ."'";
-    // }
-
-    ?>
-    type="hidden" name="token" value="<?php echo $_GET['token'] ?>">
+        <?php
+        if(is_token_set_in_session()){
+            echo "value='" . $_SESSION['token'] ."'";
+        }else{
+            echo "value='" . $_GET['token'] ."'";
+        }
+        ?>
+    type="hidden" name="token">
+    <?php } ?>
     <p>
         <label> Email </label> <br>
-        <input type="text" name="email" placeholder="Email" required>
+        <input 
+        <?php
+            if(isset($_SESSION['email'])){
+                echo "value=" . $_SESSION{'email'};
+            }
+        ?>
+        type="text" name="email" placeholder="Email">
     </p>
     <p>
         <label>Enter New Password </label> <br>

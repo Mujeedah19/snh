@@ -1,5 +1,9 @@
 <?php
 session_start();
+require_once("functions/alert.php");
+require_once("functions/redirect.php");
+require_once("functions/token.php");
+require_once("functions/user.php");
 
 
 $errorCount = 0;
@@ -11,8 +15,9 @@ $_SESSION['email'] = $email;
 
 //saving last login details
 date_default_timezone_set("Africa/Lagos");
-$logindate= date("y m d h:i:sa");
-file_put_contents("db/userlogin/" . $_SESSION['email'] . ".txt", $logindate);
+$last_login= date("y m d h:i:sa");
+$_SESSION['last_login'] = $last_login;
+
 
 if($errorCount > 0){
     $session_error = "You have " . $errorCount . " error";
@@ -21,19 +26,15 @@ if($errorCount > 0){
     }
 
     $session_error .= " in your form submission";
-    $_SESSION['error'] = $session_error;
+    set_alert("error", $session_error);
 
-    header("Location:login.php");
+    redirect_to("login.php");
 }else{
-    $allUsers = scandir("db/users/");
-    $countAllUsers = count($allUsers);
+    $currentUser = find_user($email);
 
-    for($counter = 0; $counter < $countAllUsers; $counter++){
-        $currentUser = $allUsers[$counter];
+        if($currentUser){
 
-        if($currentUser == $email . ".json"){
-
-            $userString = file_get_contents("db/users/". $currentUser);
+            $userString = file_get_contents("db/users/". $currentUser->email. ".json");
             $userObject =  json_decode($userString);
             $passwordFromDB = $userObject->password;
 
@@ -41,26 +42,30 @@ if($errorCount > 0){
 
             if($passwordFromDB == $passwordFromUser){
                 $_SESSION['loggedIn'] = $userObject->id;
+                $_SESSION['email'] = $userObject->email;
                 $_SESSION['fullname'] = $userObject->first_name . " " . $userObject->last_name;
                 $_SESSION['role'] = $userObject->designation;
                 $_SESSION['department'] = $userObject->department;
                 $_SESSION['date'] = $userObject->date;
+                $_SESSION['last_login'] = $last_login;
+
 
                 
                 if( $userObject->designation == "Patient"){
-                header("Location:patient.php");
+                    redirect_to("patient.php");
                 }else if( $userObject->designation == "Super Admin"){
-                    header("Location:superadmin.php");
+                    redirect_to("superadmin.php");
                 }else{
-                header("Location:medicalteam.php");
+                    redirect_to("medicalteam.php");
                 }
                 die();
             }
         }
 
-    }
-    $_SESSION['error'] = "Invalid Email or Password ";
-            header("Location:login.php");
+    
+            set_alert("error","Invalid Email or Password");
+
+            redirect_to("login.php");
             die();
 }
 ?>

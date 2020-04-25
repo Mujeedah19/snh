@@ -1,10 +1,16 @@
 
 <?php
-include_once("lib/header.php");
-
+require_once("lib/header.php");
+require_once("functions/alert.php");
 
 if(isset($_SESSION['loggedIn']) && !empty($_SESSION['loggedIn'])){
-    header("Location: dashboard.php");
+    if($_SESSION['role']=="Super Admin"){
+    header("Location: superadmin.php");
+    }else if($_SESSION['role']=="Patient"){
+        header("Location: patient.php");
+    }else{
+    header("Location: medicalteam.php");
+    }
 }
 ?>
 <div class="container">
@@ -12,23 +18,11 @@ if(isset($_SESSION['loggedIn']) && !empty($_SESSION['loggedIn'])){
     <h3> Login </h3>
     </div>
     <div class="row col-6">
-    <p>
-    <?php
-        if(isset($_SESSION['message']) && !empty($_SESSION['message'])){
-            echo "<span style= 'color:green' >" . $_SESSION['message'] . "</span>";
-            session_destroy();
-        }
-    ?>
-    </p>
+   
     <form method="POST" action="processlogin.php">
     
     <p>
-        <?php
-            if(isset($_SESSION['error']) && !empty($_SESSION['error'])){
-                echo "<span style= 'color:red' >" . $_SESSION['error'] . "</span>";
-                session_destroy();
-            }
-        ?>
+        <?php print_alert(); ?>
     </p>
     <p>
         <label> Email </label> <br>

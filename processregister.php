@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once("functions/user.php");
+
 $errorCount= 0;
 
 // verifying the data, validation
@@ -59,9 +61,8 @@ if($errorCount > 0){
         "password" => password_hash($password, PASSWORD_DEFAULT)
     ];
 
-    for($counter = 0; $counter < $countAllUsers; $counter++){
-        $currentUser = $allUsers[$counter];
-        if($currentUser == $email . ".json"){
+    $userExists = find_user($email);
+        if($userExists){
             $_SESSION['error'] = "Registration Failed. User already exists ";
             header("Location:register.php");
             die();
@@ -70,11 +71,11 @@ if($errorCount > 0){
 
     
 
-    file_put_contents("db/users/" . $email . ".json", json_encode($userObject));
+    save_user($userObject);
     
     $_SESSION['message'] =  $first_name . "'s Registration Successful, you can now log in.";
     header("Location:login.php");
-}
+
 
 // saving the data into database(folder)
 

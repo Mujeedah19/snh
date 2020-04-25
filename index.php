@@ -1,13 +1,10 @@
 <?php
 include_once("lib/header.php");
+require_once("functions/alert.php");
+
 ?>
         <p>
-        <?php
-            if(isset($_SESSION['message']) && !empty($_SESSION['message'])){
-                echo "<span style= 'color:green' >" . $_SESSION['message'] . "</span>";
-                session_destroy();
-            }
-        ?>
+        <?php print_alert(); ?>
         </p>
        
         <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">

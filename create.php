@@ -1,26 +1,16 @@
-
 <?php
 include_once("lib/header.php");
-require_once("functions/alert.php");
-
-
 if(isset($_SESSION['loggedIn']) && !empty($_SESSION['loggedIn'])){
-    if($_SESSION['role']=="Super Admin"){
-        header("Location: superadmin.php");
-        }else if($_SESSION['role']=="Patient"){
-            header("Location: patient.php");
-        }else{
-        header("Location: medicalteam.php");
-        }
-}
 
+   if($_SESSION['role']=="Super Admin"){
+        // echo"Super Admin";
 ?>
 <div class="container">
     <div class="row col-6">
        <h3> Register </h3>
     </div>
     <div class="row col-6">
-        <p> <strong> Welcome, Please Register </strong> </p>
+        <p> <strong> Welcome, You can register a new user </strong> </p>
     </div>
     <div class="row col-6">            
         <p> All fields are required </p>
@@ -29,7 +19,16 @@ if(isset($_SESSION['loggedIn']) && !empty($_SESSION['loggedIn'])){
 
 
             <form method="POST" action="processregister.php">
-            <?php print_alert(); ?>
+            <?php
+            if(isset($_SESSION['error']) && !empty($_SESSION['error'])){
+                echo "<span style= 'color:red' >" . $_SESSION['error'] . "</span>";
+                session_destroy();
+            }
+           
+        
+        
+            
+            ?>
             <p>
                 <label> first Name </label> <br>
                 <input
@@ -111,30 +110,13 @@ if(isset($_SESSION['loggedIn']) && !empty($_SESSION['loggedIn'])){
             </p>
             <p>
                 <label class="label" for="department"> Department </label> <br>
-                <select class="form-control" name="department" required>
-                    <option value=""> Select One </option>
-                    <option
-                    <?php
-                    if(isset($_SESSION['department']) && $_SESSION['department'] == 'Xray)'){
-                        echo "selected"; 
-                    }
-                    ?>
-                    > Xray </option>
-                    <option
-                    <?php
-                    if(isset($_SESSION['department']) && $_SESSION['department'] == 'Neurology'){
-                        echo "selected"; 
-                    }
-                    ?>
-                    > Neurology </option>
-                    <option
-                    <?php
-                    if(isset($_SESSION['department']) && $_SESSION['department'] == 'Gynaecology'){
-                        echo "selected"; 
-                    }
-                    ?>
-                    > Gynaecology  </option>
-                </select>
+                <input 
+                <?php
+                if(isset($_SESSION['department'])){
+                    echo "value=" . $_SESSION['department']; 
+                }
+                ?>
+                type="department" id="department" class="form-control" name="department" placeholder="Department" required>
             </p>
             <p>
                 <label> Date of Registration </label> <br>
@@ -147,15 +129,25 @@ if(isset($_SESSION['loggedIn']) && !empty($_SESSION['loggedIn'])){
             <p>
             <button class="btn btn-sm btn-success" type="submit" > Register </button>
             </p>
-            <p>
+            <!-- <p>
                 <a href="forgot.php"> Forgot Password </a> <br>
                 <a href="login.php"> Already have an account? Login </a>
-            </p>
+            </p> -->
 
             </form>
     </div>
 </div>
 
 <?php
-include_once("lib/footer.php");
+
+        
+        //
+   }else{
+       echo"Patient or Medic";
+   }
+
+}else{
+    header("Location: login.php");
+
+}
 ?>

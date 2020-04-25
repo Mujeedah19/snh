@@ -1,153 +1,60 @@
 <?php
 include_once("lib/header.php");
-if(isset($_SESSION['loggedIn']) && !empty($_SESSION['loggedIn'])){
-
-   if($_SESSION['role']=="Super Admin"){
-        // echo"Super Admin";
-?>
-<div class="container">
-    <div class="row col-6">
-       <h3> Register </h3>
-    </div>
-    <div class="row col-6">
-        <p> <strong> Welcome, You can register a new user </strong> </p>
-    </div>
-    <div class="row col-6">            
-        <p> All fields are required </p>
-    </div>
-    <div class="row col-6">            
+require_once('functions/user.php');
+require_once('functions/redirect.php');
+require_once("functions/alert.php");
 
 
-            <form method="POST" action="processregister.php">
-            <?php
-            if(isset($_SESSION['error']) && !empty($_SESSION['error'])){
-                echo "<span style= 'color:red' >" . $_SESSION['error'] . "</span>";
-                session_destroy();
-            }
-           
-            
+
+
+
+
+if(is_user_loggedIn()){
+
+    if($_SESSION['role']=="Super Admin"){
+
+    ?>
         
-            
-            ?>
-            <p>
-                <label> first Name </label> <br>
-                <input
-                <?php
-                if(isset($_SESSION['first_name'])){
-                    echo "value=" . $_SESSION['first_name']; 
-                }
-                ?>
-                type="text" class="form-control" name="first_name" placeholder="First Name" required>
-            </p>
-            <p>
-                <label> Last Name </label> <br>
-                <input
-                <?php
-                if(isset($_SESSION['last_name'])){
-                    echo "value=" . $_SESSION['last_name']; 
-                }
-                ?>
-                type="text" class="form-control" name="last_name" placeholder="Last Name" required>
-            </p>
-            <p>
-                <label> Email </label> <br>
-                <input
-                <?php
-                if(isset($_SESSION['email'])){
-                    echo "value=" . $_SESSION['email']; 
-                }
-                ?>
-                type="text" class="form-control" name="email" placeholder="Email" required>
-            </p>
-            <p>
-                <label> Gender </label> <br>
-                <select class="form-control" name="gender" required>
-                    <option value=""> Select One </option>
-                    <option
-                    <?php
-                    if(isset($_SESSION['gender']) && $_SESSION['gender'] == 'Female'){
-                        echo "selected"; 
-                    }
-                    ?>
-                    > Female </option>
-                    <option
-                    <?php
-                    if(isset($_SESSION['gender']) && $_SESSION['gender'] == 'Male'){
-                        echo "selected"; 
-                    }
-                    ?>
-                    > Male </option>
 
-                </select>
-            </p>
-            <p>
-                <label> Designation </label> <br>
-                <select class="form-control" name="designation" required>
-                    <option value=""> Select One </option>
-                    <option
-                    <?php
-                    if(isset($_SESSION['designation']) && $_SESSION['designation'] == 'Medical Team (MT)'){
-                        echo "selected"; 
-                    }
-                    ?>
-                    > Medical Team (MT) </option>
-                    <option
-                    <?php
-                    if(isset($_SESSION['designation']) && $_SESSION['designation'] == 'Patient'){
-                        echo "selected"; 
-                    }
-                    ?>
-                    > Patient </option>
-                    <option
-                    <?php
-                    if(isset($_SESSION['designation']) && $_SESSION['designation'] == 'Super Admin'){
-                        echo "selected"; 
-                    }
-                    ?>
-                    > Super Admin </option>
+    <div class="container">
+        <div class="row">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h3> User Dashboard </h3>
+                    <?php print_alert(); ?>
+                </div>
+                <div class="card-body">
+                        <p> Welcome, <?php echo $_SESSION['fullname']?>, You are logged in as a <?php
+                        echo $_SESSION['role']?>, and your ID is <?php echo $_SESSION['loggedIn']?> </p>
+                        <p> Department: <?php echo $_SESSION['department']?></p>
+                        <p> Date of Registration: <?php echo $_SESSION['date']?></p>
+                        <p> Last Login: <?php if(isset($_SESSION['last_login'])){
+                            echo $_SESSION['last_login'];
+                        }else{
+                            echo "First time here";
+                        } ?></p>
+                      
 
-                </select>
-            </p>
-            <p>
-                <label class="label" for="department"> Department </label> <br>
-                <input 
-                <?php
-                if(isset($_SESSION['department'])){
-                    echo "value=" . $_SESSION['department']; 
-                }
-                ?>
-                type="department" id="department" class="form-control" name="department" placeholder="Department" required>
-            </p>
-            <p>
-                <label> Date of Registration </label> <br>
-                <input type="date" class="form-control" name="date" >
-            </p>
-            <p>
-                <label> Password </label> <br>
-                <input type="password" class="form-control" name="password" placeholder="Password">
-            </p>
-            <p>
-            <button class="btn btn-sm btn-success" type="submit" > Register </button>
-            </p>
-            <!-- <p>
-                <a href="forgot.php"> Forgot Password </a> <br>
-                <a href="login.php"> Already have an account? Login </a>
-            </p> -->
-
-            </form>
+                </div>
+                <div class="card-footer">
+                        <a class="btn btn-sm btn-outline-secondary" href="create.php">Create New Users</a>
+                        <a class="btn btn-sm btn-outline-secondary" href="viewpatients.php">View All Patients</a>
+                        <a class="btn btn-sm btn-outline-secondary" href="viewstaffs.php">View All Staffs</a>
+                </div>
+            </div> 
+        </div>
     </div>
-</div>
 
-<?php
 
-        
-        //
-   }else{
-       echo"Patient or Medic";
-   }
+    <?php
+    }else{
+        redirect_to("login.php");
+    }
 
 }else{
-    header("Location: login.php");
-
+    redirect_to("login.php");
 }
 ?>
+
+
+
