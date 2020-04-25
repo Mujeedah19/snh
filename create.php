@@ -110,13 +110,12 @@ if(isset($_SESSION['loggedIn']) && !empty($_SESSION['loggedIn'])){
             </p>
             <p>
                 <label class="label" for="department"> Department </label> <br>
-                <input 
-                <?php
-                if(isset($_SESSION['department'])){
-                    echo "value=" . $_SESSION['department']; 
-                }
-                ?>
-                type="department" id="department" class="form-control" name="department" placeholder="Department" required>
+                <select class="form-control" name="department" required>
+                    <option value=""> Select One </option>
+                    <option> Xray </option>
+                    <option> Neurology </option>
+                    <option> Gynaecology  </option>
+                    </select>
             </p>
             <p>
                 <label> Date of Registration </label> <br>

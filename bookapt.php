@@ -29,11 +29,11 @@ if(is_user_loggedIn() && $_SESSION['role'] == "Patient"){
                     </div>
                     <div class="form-group">
                     <select class="form-control" name="department" required>
-                    <option value=""> Select One </option>
+                    <option value=""> Department </option>
                     <option> Xray </option>
                     <option> Neurology </option>
                     <option> Gynaecology  </option>
-                </select>
+                    </select>
                     </div>
                     <div class="form-group">
                         <textarea name="complaint" class="form-control" placeholder="Initial Complaint..." cols="30" rows="10"></textarea>
